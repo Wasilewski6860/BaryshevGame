@@ -5,34 +5,23 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-//class testRenderer extends DefaultTableCellRenderer {
-//    public Component getTableCellRendererComponent(JTable table,
-//                                                   Object value,
-//                                                   boolean isSelected,
-//                                                   boolean hasFocus,
-//                                                   int row,
-//                                                   int column) {
-//        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//        Cell c1 = (Cell) value;
-//
-//        cell.setBackground(Color.RED);
-//        return cell;
-//    }
+
 class testRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                    boolean hasFocus, int rowIndex, int vColIndex) {
 
-        if (value==null) return this;
+        if (value == null) return this;
         Cell cell = (Cell) value;
 
-//        System.out.println(cell.getState());
-
         switch (cell.getState()) {
+
             case FREE: {
                 setBackground(Color.WHITE);
                 break;
             }
+
             case BALL: {
+
                 switch (cell.getColor()) {
                     case BLUE: {
                         setBackground(Color.BLUE);
@@ -51,32 +40,42 @@ class testRenderer extends DefaultTableCellRenderer {
                         break;
                     }
                 }
+
+                break;
             }
+
             case WALL: {
+
                 setBackground(Color.GRAY);
                 break;
             }
-            case GATE:{
-                switch (cell.getColor()){
+
+            case GATE: {
+
+                switch (cell.getColor()) {
                     case BLUE: {
-                        setBackground(Color.BLUE);
+                        setBackground(new Color(56, 146, 176));
                         break;
                     }
                     case YELLOW: {
-                        setBackground(Color.YELLOW);
+                        setBackground(new Color(174, 176, 56));
                         break;
                     }
                     case GREEN: {
-                        setBackground(Color.GREEN);
+                        setBackground(new Color(56, 176, 104));
                         break;
                     }
                     case RED: {
-                        setBackground(Color.RED);
+                        setBackground(new Color(176, 56, 56));
                         break;
                     }
                 }
+
+                break;
             }
-            case GATE_WITH_BALL:{
+
+            case GATE_WITH_BALL: {
+
                 setBackground(Color.LIGHT_GRAY);
                 break;
             }

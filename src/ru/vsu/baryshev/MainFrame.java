@@ -1,29 +1,20 @@
 package ru.vsu.baryshev;
 
-import ru.vsu.baryshev.util.JTableUtils;
-
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class MainFrame extends JFrame {
     private JPanel panelMain;
     private JTable table1;
-    private JButton a1Button;
-    private JButton a5Button;
-    private JButton a3Button;
-    private JButton a2Button;
-    private JButton a4Button;
-    private JButton UPButton;
-    private JButton LEFTButton;
-    private JButton RIGHTButton;
-    private JButton DOWNButton;
+    private JButton firstLevelButton;
+    private JButton fifthLevelButton;
+    private JButton thirdLevelButton;
+    private JButton secondLevelButton;
+    private JButton forthLevelButton;
     private JTextField textField1;
     private JButton stateColorButton;
     private JButton coordinateButton;
@@ -31,7 +22,7 @@ public class MainFrame extends JFrame {
     public int selRow = 0;
     public int selCol = 0;
     Cell[][] array = new Cell[1][1];
-    GameState gameState = new GameState(array);
+
 
 
     public MainFrame() {
@@ -40,34 +31,14 @@ public class MainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
 
-        a1Button.addActionListener(new ActionListener() {
+        //Обработчики событий для кнопок выбора уровня
+        firstLevelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     //Рабочий массив
-                    array = InputArgs.StringArrayToCellArray(InputArgs.fileToStringArray("levels/level01.txt"));
-                    gameState=new GameState(array);
-
-                    for (int i=0;i < array.length;i++){
-                        System.out.println(Arrays.toString(array[i]));
-                    }
-
-                    BoardTableModel model = new BoardTableModel(array);
-                    table1.setModel(model);
-                    table1.setFocusable(false);
-                    table1.setRowSelectionAllowed(false);
-                    table1.setEnabled(true);
-                    table1.setRowHeight(30);
-                    // show grid
-                    table1.setShowGrid(true);
-                    table1.setGridColor(Color.BLACK);
-//                    JTableUtils.writeArrayToJTable(table1,array,"");
-                    table1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    for (int i = 0; i < table1.getColumnCount(); i++) {
-                        table1.setDefaultRenderer(table1.getColumnClass(i), new testRenderer());
-                        table1.getColumnModel().getColumn(i).setResizable(false);
-                    }
-                    table1.repaint();
+                    array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level01.txt")));
+                repaint();
 
 
                 } catch (IOException ex) {
@@ -75,34 +46,55 @@ public class MainFrame extends JFrame {
                 }
             }
         });
-        a2Button.addActionListener(new ActionListener() {
+        secondLevelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     //Рабочий массив
-                    array = InputArgs.StringArrayToCellArray(InputArgs.fileToStringArray("levels/level02.txt"));
-                    gameState=new GameState(array);
+                    array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level02.txt")));
+                    repaint();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        thirdLevelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //Рабочий массив
+                    array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level03.txt")));
+                    repaint();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        forthLevelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //Рабочий массив
+                    array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level04.txt")));
 
-                    for (int i=0;i < array.length;i++){
-                        System.out.println(Arrays.toString(array[i]));
-                    }
+                    repaint();
 
-                    BoardTableModel model = new BoardTableModel(array);
-                    table1.setModel(model);
-                    table1.setFocusable(false);
-                    table1.setRowSelectionAllowed(false);
-                    table1.setEnabled(true);
-                    table1.setRowHeight(30);
-                    // show grid
-                    table1.setShowGrid(true);
-                    table1.setGridColor(Color.BLACK);
-//                    JTableUtils.writeArrayToJTable(table1,array,"");
-                    table1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    for (int i = 0; i < table1.getColumnCount(); i++) {
-                        table1.setDefaultRenderer(table1.getColumnClass(i), new testRenderer());
-                        table1.getColumnModel().getColumn(i).setResizable(false);
-                    }
-                    table1.repaint();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        fifthLevelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //Рабочий массив
+                    array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level05.txt")));
+
+
+
+
+                    repaint();
 
 
                 } catch (IOException ex) {
@@ -111,229 +103,63 @@ public class MainFrame extends JFrame {
             }
         });
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher( new KeyEventDispatcher() {
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
                     switch (KeyEvent.getKeyText(e.getKeyCode())) {
-                        case "W" : {
-                            while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                                try {
-                                    TimeUnit.MILLISECONDS.sleep(100);
-                                    array = GameState.newMoving(GameState.Directions.UP, selRow, selCol, array);
+                        case "W": {
+                            while (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
+                                    array = Game.moving(Game.Directions.UP, selRow, selCol, array);
                                     repaint();
                                     selRow--;
-                                    boolean check =GameState.checkForWin(array);
-                                    if (check){
-                                        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                                        model.setRowCount(0);
-                                        textField1.setText("You win!");
-                                    }
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
-
+                                    textField1.setText(selRow+" "+selCol);
                             }
                         }
-                        case "A" : {
-                            while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                                try {
-                                    array = GameState.newMoving(GameState.Directions.LEFT, selRow, selCol, array);
+                        case "A": {
+                            while (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
+                                    array = Game.moving(Game.Directions.LEFT, selRow, selCol, array);
                                     repaint();
                                     selCol--;
-                                    TimeUnit.MILLISECONDS.sleep(200);
-
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
+                                textField1.setText(selRow+" "+selCol);
                             }
 
                         }
-                        case "S" : {
-                            while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                                try {
-                                    TimeUnit.MILLISECONDS.sleep(200);
-                                    array = GameState.newMoving(GameState.Directions.DOWN, selRow, selCol, array);
+                        case "S": {
+                            while (array[selRow][selCol].getState() == Cell.CellStates.BALL && array[selRow][selCol].getState() != Cell.CellStates.WALL) {
+
+                                    array = Game.moving(Game.Directions.DOWN, selRow, selCol, array);
                                     repaint();
                                     selRow++;
-                                    boolean check =GameState.checkForWin(array);
-                                    if (check){
-                                        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                                        model.setRowCount(0);
-                                        textField1.setText("You win!");
-                                    }
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
+                                textField1.setText(selRow+" "+selCol);
+
                             }
 
                         }
-                        case "D" : {
-                            while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                                try {
-                                    array = GameState.newMoving(GameState.Directions.RIGHT, selRow, selCol, array);
-                                    repaint();
-                                    selCol--;
-                                    TimeUnit.MILLISECONDS.sleep(200);
-                                    boolean check =GameState.checkForWin(array);
-                                    if (check){
-                                        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                                        model.setRowCount(0);
-                                        textField1.setText("You win!");
-                                    }
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
+                        case "D": {
+                            while (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
 
+                                    array = Game.moving(Game.Directions.RIGHT, selRow, selCol, array);
+                                    repaint();
+                                    selCol++;
+                                textField1.setText(selRow+" "+selCol);
+                            }
                         }
                     }
-                    boolean check =GameState.checkForWin(array);
-                    if (check){
+                    boolean check = Game.checkForWin(array);
+                    if (check) {
                         DefaultTableModel model = (DefaultTableModel) table1.getModel();
                         model.setRowCount(0);
                         textField1.setText("You win!");
                     }
-
                 }
-                // if game not finished we need further reaction on buttons
                 return false;
             }
         });
 
-        UPButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                    array = GameState.newMoving(GameState.Directions.UP, selRow, selCol, array);
-                    repaint();
-                    selRow--;
-                    boolean check =GameState.checkForWin(array);
-                    if (check){
-                        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                        model.setRowCount(0);
-                        textField1.setText("You win!");
-                    }
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-
-            }
-                boolean check =GameState.checkForWin(array);
-                if (check){
-                    DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                    model.setRowCount(0);
-                    textField1.setText("You win!");
-                }
 
 
-            }
-        });
-
-        DOWNButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(200);
-                        array = GameState.newMoving(GameState.Directions.DOWN, selRow, selCol, array);
-                        repaint();
-                        selRow++;
-                        boolean check =GameState.checkForWin(array);
-                        if (check){
-                            DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                            model.setRowCount(0);
-                            textField1.setText("You win!");
-                        }
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                boolean check =GameState.checkForWin(array);
-                if (check){
-                    DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                    model.setRowCount(0);
-                    textField1.setText("You win!");
-                }
-
-            }
-        });
-
-        RIGHTButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                    try {
-                        array = GameState.newMoving(GameState.Directions.RIGHT, selRow, selCol, array);
-                        repaint();
-                        selCol--;
-                        TimeUnit.MILLISECONDS.sleep(200);
-                        boolean check =GameState.checkForWin(array);
-                        if (check){
-                            DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                            model.setRowCount(0);
-                            textField1.setText("You win!");
-                        }
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                boolean check =GameState.checkForWin(array);
-                if (check){
-                    DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                    model.setRowCount(0);
-                    textField1.setText("You win!");
-                }
-            }
-        });
-
-        LEFTButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                while (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL) {
-                    try {
-                        array = GameState.newMoving(GameState.Directions.LEFT, selRow, selCol, array);
-                        repaint();
-                        selCol--;
-                        TimeUnit.MILLISECONDS.sleep(200);
-
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                boolean check =GameState.checkForWin(array);
-                if (check){
-                    DefaultTableModel model = (DefaultTableModel) table1.getModel();
-                    model.setRowCount(0);
-                    textField1.setText("You win!");
-                }
-
-            }
-
-        });
-
-        stateColorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textField1.setText(" "+array[selRow][selCol].getColor() +" "+array[selRow][selCol].getState());
-            }
-        });
-        paramsOfArrayButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textField1.setText("Длина = "+array[0].length+" Ширина= "+array.length);
-            }
-        });
-        coordinateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textField1.setText(selRow+", "+selCol);
-            }
-        });
 
         table1.addMouseListener(new MouseAdapter() {
             @Override
@@ -344,11 +170,20 @@ public class MainFrame extends JFrame {
             }
         });
 
+
     }
 
-    public void repaint(){
-
+    public void repaint() {
+        BoardTableModel model = new BoardTableModel(array);
+        table1.setModel(model);
+        table1.setFocusable(false);
+        table1.setRowSelectionAllowed(false);
+        table1.setEnabled(true);
         table1.setRowHeight(30);
+
+        table1.setShowGrid(true);
+        table1.setGridColor(Color.BLACK);
+
         table1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         for (int i = 0; i < table1.getColumnCount(); i++) {
             table1.setDefaultRenderer(table1.getColumnClass(i), new testRenderer());
@@ -357,21 +192,23 @@ public class MainFrame extends JFrame {
         table1.repaint();
 
     }
-    public void test(GameState.Directions dir,int whatWeWantToChange,int howWeWantToChange){
-        if (array[selRow][selCol].getState() ==Cell.CellStates.BALL ||array[selRow][selCol].getState() !=Cell.CellStates.WALL){
-            array = GameState.newMoving(GameState.Directions.LEFT, selRow, selCol, array);
+
+    public void test(Game.Directions dir, int whatWeWantToChange, int howWeWantToChange) {
+        if (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
+            array = Game.moving(Game.Directions.LEFT, selRow, selCol, array);
             repaint();
-            whatWeWantToChange=whatWeWantToChange+howWeWantToChange;
+            whatWeWantToChange = whatWeWantToChange + howWeWantToChange;
             test(dir, whatWeWantToChange, howWeWantToChange);
-        }else {
+        } else {
             return;
         }
     }
 
     private static class BoardTableModel extends DefaultTableModel {
         Object[][] dataEntries;
+
         @Override
-        public boolean isCellEditable(int row,int column){
+        public boolean isCellEditable(int row, int column) {
             return true;
         }
 
