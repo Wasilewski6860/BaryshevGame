@@ -16,12 +16,10 @@ public class MainFrame extends JFrame {
     private JButton secondLevelButton;
     private JButton forthLevelButton;
     private JTextField textField1;
-    private JButton stateColorButton;
-    private JButton coordinateButton;
-    private JButton paramsOfArrayButton;
+    //Координаты выбранной ячейки
     public int selRow = 0;
     public int selCol = 0;
-    Cell[][] array = new Cell[1][1];
+    Cell[][] array = new Cell[1][1];// Начальный массив Cell[][], впоследствии будет расширяться
 
 
 
@@ -76,9 +74,7 @@ public class MainFrame extends JFrame {
                 try {
                     //Рабочий массив
                     array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level04.txt")));
-
                     repaint();
-
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -90,26 +86,23 @@ public class MainFrame extends JFrame {
                 try {
                     //Рабочий массив
                     array = InputArgs.StringArrayToCellArray(Objects.requireNonNull(InputArgs.fileToStringArray("levels/level05.txt")));
-
-
-
-
                     repaint();
-
-
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         });
 
-
+//Слушатель событий для клавиатуры
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
                 if (e.getID() == KeyEvent.KEY_PRESSED) {
                     switch (KeyEvent.getKeyText(e.getKeyCode())) {
+
                         case "W": {
+
                             while (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
                                     array = Game.moving(Game.Directions.UP, selRow, selCol, array);
                                     repaint();
@@ -117,7 +110,9 @@ public class MainFrame extends JFrame {
                                     textField1.setText(selRow+" "+selCol);
                             }
                         }
+
                         case "A": {
+
                             while (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
                                     array = Game.moving(Game.Directions.LEFT, selRow, selCol, array);
                                     repaint();
@@ -126,7 +121,9 @@ public class MainFrame extends JFrame {
                             }
 
                         }
+
                         case "S": {
+
                             while (array[selRow][selCol].getState() == Cell.CellStates.BALL && array[selRow][selCol].getState() != Cell.CellStates.WALL) {
 
                                     array = Game.moving(Game.Directions.DOWN, selRow, selCol, array);
@@ -137,6 +134,7 @@ public class MainFrame extends JFrame {
                             }
 
                         }
+
                         case "D": {
                             while (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
 
@@ -147,6 +145,7 @@ public class MainFrame extends JFrame {
                             }
                         }
                     }
+                    //Проверка на заполненность ворот, выход из игры(очищение JTable, вывод сообщения).
                     boolean check = Game.checkForWin(array);
                     if (check) {
                         DefaultTableModel model = (DefaultTableModel) table1.getModel();
@@ -160,19 +159,18 @@ public class MainFrame extends JFrame {
 
 
 
-
+//Слушатель для мыши
         table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 selRow = table1.rowAtPoint(e.getPoint());
                 selCol = table1.columnAtPoint(e.getPoint());
-
             }
         });
 
-
     }
 
+    //Метод по перерисовке таблицы
     public void repaint() {
         BoardTableModel model = new BoardTableModel(array);
         table1.setModel(model);
@@ -193,36 +191,26 @@ public class MainFrame extends JFrame {
 
     }
 
-    public void test(Game.Directions dir, int whatWeWantToChange, int howWeWantToChange) {
-        if (array[selRow][selCol].getState() == Cell.CellStates.BALL || array[selRow][selCol].getState() != Cell.CellStates.WALL) {
-            array = Game.moving(Game.Directions.LEFT, selRow, selCol, array);
-            repaint();
-            whatWeWantToChange = whatWeWantToChange + howWeWantToChange;
-            test(dir, whatWeWantToChange, howWeWantToChange);
-        } else {
-            return;
-        }
-    }
-
+    //Класс модели для таблицы
     private static class BoardTableModel extends DefaultTableModel {
-        Object[][] dataEntries;
+        Object[][] entryDate;
 
         @Override
         public boolean isCellEditable(int row, int column) {
             return true;
         }
 
-        public BoardTableModel(Object[][] dataEntries) {
+        public BoardTableModel(Object[][] entryDate) {
 
-            this.dataEntries = dataEntries;
+            this.entryDate = entryDate;
 
-            setRowCount(dataEntries.length);
-            setColumnCount(dataEntries[0].length);
+            setRowCount(entryDate.length);
+            setColumnCount(entryDate[0].length);
 
 
-            for (int i = 0; i < dataEntries.length; i++) {
-                for (int j = 0; j < dataEntries[0].length; j++) {
-                    setValueAt(dataEntries[i][j], i, j);
+            for (int i = 0; i < entryDate.length; i++) {
+                for (int j = 0; j < entryDate[0].length; j++) {
+                    setValueAt(entryDate[i][j], i, j);
                 }
             }
         }
